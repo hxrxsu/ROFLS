@@ -23,14 +23,11 @@ namespace ROFLS
     /// </summary>
     public partial class MainWindow : Window
     {
-        Uri _gamedatapath = new Uri("file://repos//ROFLS//Data//");
-        Uri _gamedatapath2 = new Uri("file://repos//ROFLS//Data//savedata");
 
         Person character = new Person()
         {
             _health = 100,
             _stamina = 100,
-            _damage = 1121311235,
             _money = 0,
             _itemVova = false,
             _itemBara = false,
@@ -76,33 +73,9 @@ namespace ROFLS
             {
                 MessageBox.Show("u win");
                 enemy._ehealth = 100;
-                enemy._edamage = 33; 
+                enemy._edamage = 33;
                 character._money += 5;
 
-                string relativePathToAudio = "Sound\\qwe.mp4";
-                string audioFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, relativePathToAudio);
-
-                if (!File.Exists(audioFilePath))
-                {
-                    MessageBox.Show($"Файл не найден: {audioFilePath}");
-                    return;
-                }
-
-                try
-                {
-                    using (var reader = new AudioFileReader(audioFilePath))
-                    {
-                        var waveOut = new WaveOutEvent();
-                        waveOut.Init(reader);
-                        waveOut.Play();
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"Произошла ошибка при воспроизведении: {ex.Message}");
-                }
-
-            }
             else if (character._health <= 0)
             {
                 MessageBox.Show("u lose");
@@ -137,9 +110,8 @@ namespace ROFLS
         {
             RefreshData();
 
-            var _costrest = 0.5;
 
-           if(character._money >= _costrest)
+            if(character._money >= _costrest)
             {
                 character._money -= _costrest;
                 character._health += 50;
@@ -170,7 +142,6 @@ namespace ROFLS
 
         private void Button_Click_2(object sender, RoutedEventArgs e)
         {
-            var saveData = File.ReadAllText(_gamedatapath.MakeRelativeUri(_gamedatapath2).ToString());
             character = JsonConvert.DeserializeObject<Person>(saveData);
             RefreshGame();
         }
@@ -186,7 +157,6 @@ namespace ROFLS
             {
                 MessageBox.Show("Pls choose a save");
             }
-            var data = Path.Combine(_gamedatapath.MakeRelativeUri(_gamedatapath2).ToString());
             return data;
         }
 
